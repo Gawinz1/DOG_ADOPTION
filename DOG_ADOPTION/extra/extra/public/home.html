@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CDO DogFinder | Home</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <div class="sidebar">
+    <div class="logo">CDO DogFinder</div>
+    <nav>
+      <ul>
+        <li><a href="home.html" class="active"><i class="fa-solid fa-house"></i><span>Home</span></a></li>
+        <li><a href="adopt.html"><i class="fa-solid fa-paw"></i><span>Adopt</span></a></li>
+        <li><a href="about.html"><i class="fa-solid fa-circle-info"></i><span>About</span></a></li>
+        <li><a href="contact.html"><i class="fa-solid fa-envelope"></i><span>Contact</span></a></li>
+         <li><a href="Notification.html"><i class="fa-solid fa-bell"></i><span>Notification</span></a></li>
+      </ul>
+    </nav>
+    <div class="logout-wrap">
+      <button id="logoutBtn" class="btn-logout" style="display:none;">Logout</button>
+    </div>
+  </div>
+
+  <main class="content">
+    <section class="hero">
+      <h2>“Adopt, don’t shop — because every dog deserves a home.”</h2>
+    </section>
+
+    <section class="dog-gallery">
+      <h2>Meet Our Lovely Dogs</h2>
+      <div class="dog-grid" id="dog-gallery"></div>
+    </section>
+  </main>
+
+  <!-- 🐾 Dog Info Modal -->
+  <div id="dogInfoModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <img id="dogInfoImg" src="" alt="Dog" style="width:100%; border-radius:10px;">
+      <h2 id="dogInfoName"></h2>
+      <p id="dogInfoBreed"></p>
+      <p id="dogInfoAge"></p>
+      <p id="dogInfoDesc"></p>
+    </div>
+  </div>
+
+  <!-- ✅ Add Supabase here before your script -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>
+    // ⚙️ Replace with your actual Supabase project details:
+    const SUPABASE_URL = "https://ncfsmxmqipfugyphfmmp.supabase.co"; // e.g. https://abcxyz.supabase.co
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5jZnNteG1xaXBmdWd5cGhmbW1wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI5NDcwMTIsImV4cCI6MjA3ODUyMzAxMn0.EPB8S9FCggS3YRDBL9NcyiLJs-1On009BfCpQhX1G9U"; // from Supabase → Settings → API
+
+    // Create Supabase client
+    window.supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  </script>
+
+  <!-- Your main JavaScript file -->
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | CDO DogFinder</title>
+ <link rel="stylesheet" href="auth.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+  <div class="auth-container">
+    <h2>Login to Your Account 🐶</h2>
+    <form id="loginForm">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Enter your email" required />
+
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter your password" required />
+
+        <label for="role">Role</label>
+        <select id="role" required>
+          <option value="">Select Role</option>
+          <option value="user">User</option>
+          <option value="admin">Admin</option>
+        </select>
+
+        <button type="submit">Login</button>
+      </form>
+
+      <p class="register-link">
+        Don’t have an account? <a href="register.html">Register here</a>
+      </p>
+    </div>
+
+  <script>
+    // ⚙️ Supabase Configuration
+    const SUPABASE_URL = "https://ncfsmxmqipfugyphfmmp.supabase.co";
+    const SUPABASE_ANON_KEY =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5jZnNteG1xaXBmdWd5cGhmbW1wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI5NDcwMTIsImV4cCI6MjA3ODUyMzAxMn0.EPB8S9FCggS3YRDBL9NcyiLJs-1On009BfCpQhX1G9U";
+
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // 🧾 Handle Login
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const role = document.getElementById("role").value;
+
+      try {
+        console.log("Attempting login with:", { email, password, role });
+        // Query by email + password ONLY (don't filter by role yet)
+        const { data, error } = await supabaseClient
+          .from("users")
+          .select("*")
+          .eq("email", email)
+          .eq("password", password);
+
+        console.log("Login query result:", { data, error });
+
+        if (error) {
+          console.error("Login error:", error);
+          alert(`❌ Login failed: ${error.message}`);
+          return;
+        }
+
+        if (!data || data.length === 0) {
+          console.log("No matching user found");
+          alert("❌ Invalid credentials. Please try again!");
+          return;
+        }
+
+        const user = data[0]; // Get first matching user
+        console.log("User found:", user);
+        console.log("User role value:", user.role, "Type:", typeof user.role);
+
+        // Save user info locally
+        localStorage.setItem("loggedUser", JSON.stringify(user));
+        
+        // Redirect based on role from DATABASE (not the role input)
+        const userRole = (user.role || '').toLowerCase().trim();
+        console.log("Trimmed role:", userRole);
+        
+        if (userRole === "admin") {
+          console.log("Redirecting to admin dashboard...");
+          window.location.href = "dashboard-analytics.html";
+        } else {
+          console.log("Redirecting to home page...");
+          window.location.href = "home.html";
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Login failed. Please check your inputs or connection.");
+      }
+    });
+  </script>
+</body>
+</html>

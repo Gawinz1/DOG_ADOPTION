@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register | CDO DogFinder</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+</head>
+<body class="login-page">
+  <div class="login-container">
+    <h2>Create Your Account 🐾</h2>
+
+    <form id="registerForm">
+      <label for="name">Name</label>
+      <input type="text" id="name" placeholder="Enter your name" required />
+
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="Enter your email" required />
+
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Enter your password" required />
+
+      <label for="address">Address</label>
+      <input type="text" id="address" placeholder="Enter your address" required />
+
+      <label for="role">Role</label>
+      <select id="role" required>
+        <option value="">Select Role</option>
+        <option value="user">User</option>
+        <option value="admin">Admin</option>
+      </select>
+
+      <button type="submit">Register</button>
+    </form>
+
+    <p class="register-link">
+      Already have an account? <a href="login.html">Login here</a>
+    </p>
+  </div>
+
+  <script>
+    // ✅ Supabase connection setup
+    const SUPABASE_URL = "https://ncfsmxmqipfugyphfmmp.supabase.co";
+    const SUPABASE_ANON_KEY =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5jZnNteG1xaXBmdWd5cGhmbW1wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI5NDcwMTIsImV4cCI6MjA3ODUyMzAxMn0.EPB8S9FCggS3YRDBL9NcyiLJs-1On009BfCpQhX1G9U";
+
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // 🧾 Handle registration
+    document.getElementById("registerForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const address = document.getElementById("address").value.trim();
+      const role = document.getElementById("role").value;
+
+      // 🔍 Check if email already exists
+      const { data: existingUser, error: checkError } = await supabaseClient
+        .from("users")
+        .select("*")
+        .eq("email", email);
+
+      if (checkError) {
+        alert("⚠️ Error checking user. Please try again.");
+        return;
+      }
+
+      if (existingUser.length > 0) {
+        alert("❌ This email is already registered. Please login instead.");
+        return;
+      }
+
+      // 📝 Insert new user
+      const { error: insertError } = await supabaseClient
+        .from("users")
+        .insert([{ name, email, password, address, role }]);
+
+      if (insertError) {
+        alert("❌ Registration failed. Please try again.");
+        console.error(insertError);
+        return;
+      }
+
+      alert("✅ Successfully registered! You can now login.");
+      window.location.href = "login.html";
+    });
+  </script>
+</body>
+</html>

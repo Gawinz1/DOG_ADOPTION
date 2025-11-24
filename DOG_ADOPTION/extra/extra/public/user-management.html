@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin | User Management</title>
+  <link rel="stylesheet" href="admin-style.css">
+</head>
+<body>
+  <header>
+   <div class="sidebar">
+  <div class="logo">CDO Admin</div>
+  <nav>
+    <ul>
+      <li><a href="dashboard-analytics.html" class="active"><i class="fa-solid fa-chart-line"></i><span>Dashboard</span></a></li>
+      <li><a href="user-management.html"><i class="fa-solid fa-users"></i><span>Users</span></a></li>
+      <li><a href="adoption-management.html"><i class="fa-solid fa-paw"></i><span>Adoptions</span></a></li>
+      <li><a href="dog-status.html"><i class="fa-solid fa-dog"></i><span>Dogs</span></a></li>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    </ul>
+  </nav>
+</div>
+
+  </header>
+
+  <main>
+    <section class="users">
+      <h2>Registered Users</h2>
+      <table id="usersTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="usersTableBody"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <!-- ✅ Supabase client for admin pages -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>
+    const SUPABASE_URL = "https://ncfsmxmqipfugyphfmmp.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5jZnNteG1xaXBmdWd5cGhmbW1wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI5NDcwMTIsImV4cCI6MjA3ODUyMzAxMn0.EPB8S9FCggS3YRDBL9NcyiLJs-1On009BfCpQhX1G9U";
+    window.supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  </script>
+
+  <script src="admin-script.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

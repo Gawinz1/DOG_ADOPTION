@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin | Dog Status Automation</title>
+  <link rel="stylesheet" href="admin-style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <header>
+    <div class="sidebar">
+      <div class="logo">CDO Admin</div>
+      <button id="sidebarToggle" class="toggle-btn" aria-label="Toggle sidebar"><i class="fa-solid fa-bars"></i></button>
+      <nav>
+        <ul>
+          <li><a href="dashboard-analytics.html"><i class="fa-solid fa-chart-line"></i><span>Dashboard</span></a></li>
+          <li><a href="user-management.html"><i class="fa-solid fa-users"></i><span>Users</span></a></li>
+          <li><a href="adoption-management.html"><i class="fa-solid fa-paw"></i><span>Adoptions</span></a></li>
+          <li><a href="dog-status.html" class="active"><i class="fa-solid fa-dog"></i><span>Dogs</span></a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- 🐕 CREATE DOG FORM -->
+    <section class="dog-form-section">
+      <h2>➕ Add New Dog</h2>
+      <form id="dogForm" class="dog-form">
+        <div class="form-group">
+          <label for="dogName">Name:</label>
+          <input type="text" id="dogName" name="name" required placeholder="e.g., Buddy">
+        </div>
+        <div class="form-group">
+          <label for="dogBreed">Breed:</label>
+          <input type="text" id="dogBreed" name="breed" required placeholder="e.g., Golden Retriever">
+        </div>
+        <div class="form-group">
+          <label for="dogAge">Age:</label>
+          <input type="number" id="dogAge" name="age" required placeholder="e.g., 3">
+        </div>
+        <div class="form-group">
+          <label for="dogStatus">Status:</label>
+          <select id="dogStatus" name="status" required>
+            <option value="">Select Status</option>
+            <option value="Available">Available</option>
+            <option value="Adopted">Adopted</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="dogImage">Image URL (optional):</label>
+          <input type="text" id="dogImage" name="image_url" placeholder="https://example.com/image.jpg">
+        </div>
+        <button type="submit" class="btn-primary">Add Dog</button>
+      </form>
+    </section>
+
+    <!-- 🐕 DOGS LIST TABLE -->
+    <section class="dog-status">
+      <h2>Dogs List</h2>
+      <table id="dogsTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Breed</th>
+            <th>Age</th>
+            <th>Gender</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="dogsTableBody"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <!-- ✅ Supabase client for admin pages -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>
+    const SUPABASE_URL = "https://ncfsmxmqipfugyphfmmp.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5jZnNteG1xaXBmdWd5cGhmbW1wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI5NDcwMTIsImV4cCI6MjA3ODUyMzAxMn0.EPB8S9FCggS3YRDBL9NcyiLJs-1On009BfCpQhX1G9U";
+    window.supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  </script>
+
+  <script src="script.js"></script>
+  <script src="admin-script.js"></script>
+  <script>
+    // Load dogs on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('dog-status.html DOMContentLoaded fired');
+      try {
+        console.log('loadDogs typeof ->', typeof loadDogs);
+        const debugDiv = document.getElementById('dogsDebug');
+        if (typeof loadDogs === 'function') {
+          if (debugDiv) debugDiv.textContent = 'Calling loadDogs()...';
+          const p = loadDogs();
+          if (p && typeof p.catch === 'function') {
+            p.catch((err) => {
+              console.error('loadDogs() rejected:', err);
+              if (debugDiv) debugDiv.textContent = 'Error during loadDogs(): ' + (err && err.message ? err.message : String(err));
+            });
+          }
+        } else {
+          console.error('loadDogs is not defined');
+          if (debugDiv) debugDiv.textContent = 'Error: loadDogs() not found. Check that `admin-script.js` loaded.';
+        }
+      } catch (err) {
+        console.error('Error while attempting to call loadDogs():', err);
+        const debugDiv = document.getElementById('dogsDebug');
+        if (debugDiv) debugDiv.textContent = 'Exception when calling loadDogs(): ' + (err && err.message ? err.message : String(err));
+      }
+
+      // Handle dog form submission
+      const dogForm = document.getElementById('dogForm');
+      if (dogForm) {
+        dogForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const formData = {
+            name: document.getElementById('dogName').value.trim(),
+            breed: document.getElementById('dogBreed').value.trim(),
+            age: document.getElementById('dogAge').value.trim(),
+            status: document.getElementById('dogStatus').value,
+            image_url: document.getElementById('dogImage').value.trim()
+          };
+          createDog(formData);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

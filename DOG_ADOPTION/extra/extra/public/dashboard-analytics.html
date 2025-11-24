@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin | Dashboard Analytics</title>
+  <link rel="stylesheet" href="admin-style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- ✅ Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // ⚙️ Supabase project values (same as other pages) — public anon key
+    const SUPABASE_URL = "https://ncfsmxmqipfugyphfmmp.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5jZnNteG1xaXBmdWd5cGhmbW1wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI5NDcwMTIsImV4cCI6MjA3ODUyMzAxMn0.EPB8S9FCggS3YRDBL9NcyiLJs-1On009BfCpQhX1G9U";
+    window.supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  </script>
+</head>
+<body>
+  <header>
+    <div class="sidebar">
+      <div class="logo">CDO Admin</div>
+      <nav>
+        <ul>
+          <li><a href="dashboard-analytics.html" class="active"><i class="fa-solid fa-chart-line"></i><span>Dashboard</span></a></li>
+          <li><a href="user-management.html"><i class="fa-solid fa-users"></i><span>Users</span></a></li>
+          <li><a href="adoption-management.html"><i class="fa-solid fa-paw"></i><span>Adoptions</span></a></li>
+          <li><a href="dog-status.html"><i class="fa-solid fa-dog"></i><span>Dogs</span></a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="analytics">
+      <h2>📊 Quick Stats</h2>
+      <div class="stats-grid">
+        <div class="stat-card">Total Dogs: <span id="totalDogs">0</span></div>
+        <div class="stat-card">Adopted Dogs: <span id="adoptedDogs">0</span></div>
+        <div class="stat-card">Available Dogs: <span id="availableDogs">0</span></div>
+        <div class="stat-card">Total Applications: <span id="totalApplications">0</span></div>
+        <div class="stat-card">Approved: <span id="approvedApplications">0</span></div>
+        <div class="stat-card">Rejected: <span id="rejectedApplications">0</span></div>
+      </div>
+      <canvas id="adoptionChart"></canvas>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="admin-script.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
